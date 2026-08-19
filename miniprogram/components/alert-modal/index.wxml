@@ -1,0 +1,9 @@
+<view wx:if="{{alarm}}" class="alarm-mask">
+  <view class="alarm-panel">
+    <view class="alarm-flash"></view>
+    <view class="alarm-icon">⚠</view>
+    <view class="alarm-title">{{alarm.title}}</view>
+    <view class="alarm-msg">{{alarm.msg}}</view>
+    <button class="btn-danger alarm-btn" bindtap="onConfirm">我知道了</button>
+  </view>
+</view>

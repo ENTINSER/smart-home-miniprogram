@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "alert-modal": "/components/alert-modal/index"
+  },
+  "navigationBarTitleText": "全屋状态"
+}

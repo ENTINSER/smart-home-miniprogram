@@ -1,0 +1,28 @@
+page {
+  background: #101623;
+  color: #e8ecf3;
+  font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+  font-size: 28rpx;
+}
+
+.card {
+  background: #1a2233;
+  border-radius: 20rpx;
+  padding: 28rpx;
+}
+
+.text-dim {
+  color: #8b93a7;
+}
+
+.btn-primary {
+  background: #2f6bff;
+  color: #fff;
+  border-radius: 16rpx;
+}
+
+.btn-danger {
+  background: #e5484d;
+  color: #fff;
+  border-radius: 16rpx;
+}

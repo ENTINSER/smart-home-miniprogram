@@ -1,0 +1,115 @@
+<view class="page" wx:if="{{device}}">
+  <view class="card status-card">
+    <view class="status-label text-dim">当前状态</view>
+    <view class="status-value">{{summary}}</view>
+  </view>
+
+  <!-- 空调：开关 + 温度滑块（FR-03） -->
+  <block wx:if="{{device.id === 'aircon'}}">
+    <view class="card">
+      <view class="row">
+        <text>电源</text>
+        <switch checked="{{state.power === 'on'}}" bindchange="onAirconPower" disabled="{{sending}}" />
+      </view>
+      <view class="row temp-row">
+        <text>温度</text>
+        <text class="temp-value">{{state.temp}}℃</text>
+      </view>
+      <slider
+        min="{{tempRange[0]}}"
+        max="{{tempRange[1]}}"
+        value="{{state.temp}}"
+        activeColor="#2f6bff"
+        block-size="24"
+        bindchanging="onTempChanging"
+        bindchange="onTempChange"
+        disabled="{{sending || state.power !== 'on'}}"
+      />
+    </view>
+  </block>
+
+  <!-- 窗帘：一键开/关 + 开度滑块（FR-04） -->
+  <block wx:if="{{device.id === 'curtain'}}">
+    <view class="card">
+      <view class="row">
+        <text>开度 {{state.position}}%</text>
+      </view>
+      <slider
+        min="0"
+        max="100"
+        value="{{state.position}}"
+        activeColor="#2f6bff"
+        block-size="24"
+        bindchange="onCurtainSlide"
+        disabled="{{sending}}"
+      />
+      <view class="btn-row">
+        <button class="btn-primary half" bindtap="onCurtainOpen" disabled="{{sending}}">全开</button>
+        <button class="btn-primary half" bindtap="onCurtainClose" disabled="{{sending}}">全关</button>
+      </view>
+    </view>
+  </block>
+
+  <!-- 天然气阀门（FR-06） -->
+  <block wx:if="{{device.id === 'gas_valve'}}">
+    <view class="card">
+      <view class="row">
+        <text>阀门状态</text>
+        <text class="{{state.open ? 'valve-open' : 'valve-closed'}}">{{state.open ? '开启' : '已关'}}</text>
+      </view>
+      <view class="btn-row">
+        <button wx:if="{{!state.open}}" class="btn-primary half" bindtap="onGasOpen" disabled="{{sending}}">打开阀门</button>
+        <button wx:else class="btn-danger half" bindtap="onGasClose" disabled="{{sending}}">关闭阀门</button>
+      </view>
+    </view>
+  </block>
+
+  <!-- 门锁 -->
+  <block wx:if="{{device.id === 'door_lock'}}">
+    <view class="card">
+      <view class="btn-row">
+        <button wx:if="{{!state.locked}}" class="btn-primary half" bindtap="onLock" disabled="{{sending}}">上锁</button>
+        <button wx:else class="btn-danger half" bindtap="onUnlock" disabled="{{sending}}">开锁</button>
+      </view>
+    </view>
+  </block>
+
+  <!-- 饮水机：水量展示（FR-05） -->
+  <block wx:if="{{device.id === 'water_dispenser'}}">
+    <view class="card">
+      <view class="row"><text>剩余水量</text><text>{{state.level}}%</text></view>
+      <progress percent="{{state.level}}" stroke-width="10" activeColor="#2f6bff" backgroundColor="#2a3350" border-radius="8" />
+      <view wx:if="{{state.level < 20}}" class="warn-text">水量不足，请及时换水</view>
+    </view>
+  </block>
+
+  <!-- 洗衣机 / 洗碗机：运行状态（FR-05） -->
+  <block wx:if="{{device.id === 'washing_machine' || device.id === 'dishwasher'}}">
+    <view class="card">
+      <view class="row">
+        <text>运行状态</text>
+        <text>{{state.running ? '工作中' : '待机'}}</text>
+      </view>
+      <view wx:if="{{state.running && device.id === 'washing_machine'}}" class="row">
+        <text>洗涤模式</text><text>{{state.mode}}</text>
+      </view>
+      <view wx:if="{{state.running}}" class="row">
+        <text>剩余时间</text><text>{{state.remainMin}} 分钟</text>
+      </view>
+      <view class="btn-row">
+        <button wx:if="{{!state.running}}" class="btn-primary half" bindtap="onStartWash" disabled="{{sending}}">启动</button>
+        <button wx:else class="btn-danger half" bindtap="onStopWash" disabled="{{sending}}">停止</button>
+      </view>
+    </view>
+  </block>
+
+  <!-- 摄像头 -->
+  <block wx:if="{{device.id === 'camera'}}">
+    <view class="card">
+      <view class="row"><text>设备</text><text>{{state.online ? '在线' : '离线'}}</text></view>
+      <view class="row"><text>移动侦测</text><text class="{{state.detecting ? 'warn-text' : ''}}">{{state.detecting ? '检测到移动！' : '无异常'}}</text></view>
+    </view>
+  </block>
+
+  <alert-modal alarm="{{activeAlarm}}" bind:close="onAlarmModalClose" />
+</view>

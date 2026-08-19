@@ -1,0 +1,42 @@
+<view class="page">
+  <!-- 顶部告警条：有活跃告警时红闪常驻（安全信息前置） -->
+  <view wx:if="{{activeAlarm}}" class="alarm-banner">{{activeAlarm.title}} · 待处理</view>
+
+  <!-- 连接状态 -->
+  <view class="conn-bar {{connected ? 'conn-ok' : 'conn-bad'}}">
+    {{connected ? '已连接消息中枢' : '消息中枢未连接，等待重连…'}}
+  </view>
+
+  <!-- 安全区：置顶红标 -->
+  <view class="section-title">安全防护</view>
+  <view
+    wx:for="{{safetyDevices}}"
+    wx:key="id"
+    class="card device-card safety-card {{item.danger ? 'card-danger' : ''}}"
+    data-id="{{item.id}}"
+    bindtap="goControl"
+  >
+    <view class="device-head">
+      <text class="device-name">{{item.name}}</text>
+      <text class="safety-tag">安全</text>
+    </view>
+    <view class="device-summary {{item.danger ? 'summary-danger' : ''}}">{{item.summary}}</view>
+    <view class="device-desc text-dim">{{item.desc}}</view>
+  </view>
+
+  <!-- 生活设备区 -->
+  <view class="section-title">生活设备</view>
+  <view
+    wx:for="{{normalDevices}}"
+    wx:key="id"
+    class="card device-card"
+    data-id="{{item.id}}"
+    bindtap="goControl"
+  >
+    <view class="device-name">{{item.name}}</view>
+    <view class="device-summary">{{item.summary}}</view>
+    <view class="device-desc text-dim">{{item.desc}}</view>
+  </view>
+
+  <alert-modal alarm="{{activeAlarm}}" bind:close="onAlarmModalClose" />
+</view>

@@ -1,0 +1,14 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/control/index"
+  ],
+  "window": {
+    "navigationBarBackgroundColor": "#101623",
+    "navigationBarTitleText": "智能监测2",
+    "navigationBarTextStyle": "white",
+    "backgroundColor": "#101623"
+  },
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

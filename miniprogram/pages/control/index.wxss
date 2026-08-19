@@ -1,0 +1,54 @@
+.page {
+  padding: 24rpx;
+}
+
+.status-card {
+  margin-bottom: 24rpx;
+}
+
+.status-label {
+  font-size: 24rpx;
+}
+
+.status-value {
+  font-size: 40rpx;
+  font-weight: 700;
+  margin-top: 8rpx;
+  color: #7fd3a5;
+}
+
+.card {
+  margin-bottom: 24rpx;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16rpx 0;
+}
+
+.temp-value {
+  font-size: 44rpx;
+  font-weight: 700;
+  color: #2f6bff;
+}
+
+.btn-row {
+  display: flex;
+  justify-content: center;
+  gap: 24rpx;
+  margin-top: 16rpx;
+}
+
+.half {
+  width: 45%;
+}
+
+.valve-open { color: #ffb224; font-weight: 700; }
+.valve-closed { color: #2ec47d; font-weight: 700; }
+
+.warn-text {
+  color: #ffb224;
+  margin-top: 16rpx;
+}

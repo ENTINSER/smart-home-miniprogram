@@ -1,0 +1,14 @@
+{
+  "name": "mock-devices",
+  "version": "1.0.0",
+  "description": "智能家居模拟设备脚本：定时上报状态、响应控制指令、触发告警场景",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "alarm:gas": "node trigger-alarm.js gas",
+    "alarm:intruder": "node trigger-alarm.js intruder"
+  },
+  "dependencies": {
+    "mqtt": "^4.3.8"
+  }
+}

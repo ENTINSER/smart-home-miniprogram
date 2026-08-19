@@ -1,0 +1,57 @@
+.alarm-mask {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.alarm-panel {
+  width: 80%;
+  background: #1f0d0e;
+  border: 4rpx solid #e5484d;
+  border-radius: 24rpx;
+  padding: 48rpx 36rpx;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.alarm-flash {
+  position: absolute;
+  inset: 0;
+  background: #e5484d;
+  opacity: 0;
+  animation: flash 0.9s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes flash {
+  0%, 100% { opacity: 0; }
+  50% { opacity: 0.18; }
+}
+
+.alarm-icon {
+  font-size: 72rpx;
+  color: #ff6b6f;
+}
+
+.alarm-title {
+  font-size: 40rpx;
+  font-weight: 700;
+  color: #ff8387;
+  margin: 16rpx 0;
+}
+
+.alarm-msg {
+  color: #f3c1c3;
+  line-height: 1.6;
+  margin-bottom: 40rpx;
+}
+
+.alarm-btn {
+  width: 100%;
+  font-size: 32rpx;
+}

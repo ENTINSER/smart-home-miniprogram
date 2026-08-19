@@ -1,0 +1,22 @@
+{
+  "compileType": "miniprogram",
+  "libVersion": "3.8.12",
+  "appid": "wxac2e9582a8e9a5d3",
+  "projectname": "%E6%99%BA%E8%83%BD%E7%9B%91%E6%B5%8B2",
+  "description": "智能家居综合管理小程序（零预算可演示版）",
+  "miniprogramRoot": "miniprogram/",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "setting": {
+    "urlCheck": false,
+    "es6": true,
+    "enhance": true,
+    "postcss": true,
+    "minified": true,
+    "ignoreUploadUnusedFiles": true
+  },
+  "packOptions": {
+    "ignore": [
+      { "type": "folder", "value": "tools" }
+    ]
+  }
+}

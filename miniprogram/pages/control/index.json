@@ -1,0 +1,5 @@
+{
+  "usingComponents": {
+    "alert-modal": "/components/alert-modal/index"
+  }
+}

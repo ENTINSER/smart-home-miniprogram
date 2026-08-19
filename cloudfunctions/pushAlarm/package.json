@@ -1,0 +1,9 @@
+{
+  "name": "pushAlarm",
+  "version": "1.0.0",
+  "description": "告警订阅消息推送（预留：正式推送阶段使用）",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}
