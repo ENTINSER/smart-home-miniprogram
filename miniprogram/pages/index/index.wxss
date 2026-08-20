@@ -29,6 +29,14 @@
 .conn-ok { background: rgba(46, 196, 125, 0.15); color: #2ec47d; }
 .conn-bad { background: rgba(229, 72, 77, 0.15); color: #ff8387; }
 
+.conn-error {
+  font-size: 22rpx;
+  color: #ff8387;
+  padding: 8rpx 16rpx;
+  margin: -16rpx 0 20rpx;
+  word-break: break-all;
+}
+
 .section-title {
   font-size: 30rpx;
   font-weight: 600;

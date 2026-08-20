@@ -64,10 +64,14 @@ function connect() {
 
   client.on('close', () => {
     getApp().globalData.mqttConnected = false;
-    emit('conn', false);
+    emit('conn', false, getApp().globalData.lastMqttError || '');
   });
   client.on('error', (err) => {
-    console.error('[mqtt] 连接错误', err);
+    const msg = (err && (err.message || err.errMsg)) || String(err);
+    console.error('[mqtt] 连接错误', msg, err);
+    getApp().globalData.mqttConnected = false;
+    getApp().globalData.lastMqttError = msg;
+    emit('conn', false, msg);
   });
 
   return client;

@@ -6,6 +6,7 @@
   <view class="conn-bar {{connected ? 'conn-ok' : 'conn-bad'}}">
     {{connected ? '已连接消息中枢' : '消息中枢未连接，等待重连…'}}
   </view>
+  <view wx:if="{{!connected && connError}}" class="conn-error">错误详情：{{connError}}</view>
 
   <!-- 安全区：置顶红标 -->
   <view class="section-title">安全防护</view>

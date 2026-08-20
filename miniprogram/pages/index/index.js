@@ -5,6 +5,7 @@ const { DEVICES, summarize } = require('../../utils/devices');
 Page({
   data: {
     connected: false,
+    connError: '',
     safetyDevices: [],   // 安全类设备置顶（FR-02）
     normalDevices: [],
     activeAlarm: null,
@@ -12,7 +13,7 @@ Page({
 
   onLoad() {
     this._onStatus = () => this.renderDevices();
-    this._onConn = (connected) => this.setData({ connected });
+    this._onConn = (connected, errMsg) => this.setData({ connected, connError: errMsg || '' });
     this._onAlarm = (alarm) => alarmUtil.fire(alarm);
 
     mqtt.on('status', this._onStatus);
