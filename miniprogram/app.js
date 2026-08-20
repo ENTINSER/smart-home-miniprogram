@@ -8,6 +8,8 @@ App({
     activeAlarm: null,
     // MQTT 连接状态
     mqttConnected: false,
+    // 最近一次连接错误（用于首页错误展示）
+    lastMqttError: '',
   },
 
   onLaunch() {
@@ -17,6 +19,14 @@ App({
     // }
 
     const mqtt = require('./utils/mqtt');
-    mqtt.connect();
+    try {
+      console.log('[mqtt] 正在连接', config.MQTT_URL);
+      mqtt.connect();
+    } catch (e) {
+      // 启动期同步异常（如库兼容性问题），记录并上屏
+      const msg = (e && e.message) || String(e);
+      console.error('[mqtt] 启动连接异常', msg, e);
+      this.globalData.lastMqttError = '启动异常: ' + msg;
+    }
   },
 });

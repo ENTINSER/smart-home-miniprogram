@@ -1,10 +1,10 @@
 /**
  * MQTT 连接层（小程序端）
  *
- * 使用 mqtt.js 浏览器构建版（libs/mqtt.min.js），通过 wx:// 协议
- * 底层调用 wx.connectSocket，开发者工具勾选「不校验合法域名」后可连本机 Broker
+ * 底层使用自研的 wxmqtt.js（极简 MQTT 3.1.1 over wx.connectSocket）
+ * 开发者工具勾选「不校验合法域名」后可连本机 Broker
  */
-const mqttLib = require('../libs/mqtt.min.js');
+const { WxMqttClient } = require('./wxmqtt');
 const config = require('../config/index');
 const { TOPIC, DEVICES } = require('./devices');
 
@@ -12,38 +12,35 @@ let client = null;
 const listeners = {
   status: new Set(),   // (deviceId, state) => {}
   alarm: new Set(),    // (alarm) => {}
-  conn: new Set(),     // (connected) => {}
+  conn: new Set(),     // (connected, errMsg) => {}
   ack: new Set(),      // (deviceId, ack) => {}
 };
 
 function connect() {
   if (client) return client;
 
-  client = mqttLib.connect(config.MQTT_URL, {
-    clientId: `miniprogram_${Math.random().toString(16).slice(2, 10)}`,
+  client = new WxMqttClient(config.MQTT_URL, {
     keepalive: 30,
     reconnectPeriod: 3000,
-    connectTimeout: 5000,
   });
 
   client.on('connect', () => {
     getApp().globalData.mqttConnected = true;
+    getApp().globalData.lastMqttError = '';
     // 订阅所有设备状态、回执与告警主题
     const topics = [TOPIC.alarm];
     DEVICES.forEach((d) => {
       topics.push(TOPIC.status(d.id));
       topics.push(TOPIC.ack(d.id));
     });
-    client.subscribe(topics, (err) => {
-      if (err) console.error('[mqtt] 订阅失败', err);
-    });
-    emit('conn', true);
+    client.subscribe(topics);
+    emit('conn', true, '');
   });
 
   client.on('message', (topic, payload) => {
     let data;
     try {
-      data = JSON.parse(payload.toString());
+      data = JSON.parse(payload);
     } catch (e) {
       return;
     }
@@ -64,16 +61,18 @@ function connect() {
 
   client.on('close', () => {
     getApp().globalData.mqttConnected = false;
-    emit('conn', false, getApp().globalData.lastMqttError || '');
+    emit('conn', false, getApp().globalData.lastMqttError || '连接已断开');
   });
+
   client.on('error', (err) => {
     const msg = (err && (err.message || err.errMsg)) || String(err);
-    console.error('[mqtt] 连接错误', msg, err);
+    console.error('[mqtt] 连接错误', msg);
     getApp().globalData.mqttConnected = false;
     getApp().globalData.lastMqttError = msg;
     emit('conn', false, msg);
   });
 
+  client.connect();
   return client;
 }
 
@@ -83,6 +82,15 @@ function connect() {
  */
 function sendControl(deviceId, action, value) {
   return new Promise((resolve) => {
+    if (!client) {
+      console.warn('[mqtt] 客户端未就绪，尝试重连');
+      try {
+        connect();
+      } catch (e) {}
+      resolve({ ok: false, error: 'not_connected' });
+      return;
+    }
+
     const reqId = `${Date.now()}_${Math.random().toString(16).slice(2, 8)}`;
     const timer = setTimeout(() => {
       off('ack', handler);
@@ -107,6 +115,11 @@ function sendControl(deviceId, action, value) {
 
 function on(type, fn) {
   listeners[type].add(fn);
+  // 重放当前连接状态，避免页面错过启动阶段的错误事件
+  if (type === 'conn') {
+    const g = getApp().globalData;
+    if (!g.mqttConnected && g.lastMqttError) fn(false, g.lastMqttError);
+  }
 }
 function off(type, fn) {
   listeners[type].delete(fn);

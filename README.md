@@ -11,7 +11,7 @@ smart-home-miniprogram/
 │   ├── pages/control/      # 设备控制页：空调滑块/窗帘开关/水量与运行状态
 │   ├── components/         # alert-modal：告警全屏强打断弹窗
 │   ├── utils/              # mqtt 连接层、设备模型、告警调度
-│   ├── libs/mqtt.min.js    # mqtt.js 浏览器构建版（wx:// 协议）
+│   ├── utils/wxmqtt.js     # 自研极简 MQTT 客户端（wx.connectSocket）
 │   └── config/index.js     # 全局配置（Broker 地址、模板 ID 等）
 ├── cloudfunctions/         # 云函数（login 登录 / pushAlarm 推送预留）
 └── tools/mock-devices/     # Node.js 模拟设备脚本
